@@ -1,0 +1,18 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/blackColor</item>
+        <item name="colorPrimaryDark">@color/blackColor</item>
+        <item name="colorAccent">@color/blackColor</item>
+        <item name="windowNoTitle">true</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
+    </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/blackColor</item>
+        <item name="itemTextColor">@color/bottom_nav</item>
+        <item name="itemIconTint">@color/bottom_nav</item>
+    </style>
+
+</resources>
