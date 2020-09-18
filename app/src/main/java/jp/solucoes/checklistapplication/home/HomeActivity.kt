@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import jp.solucoes.checklistapplication.R
 import jp.solucoes.checklistapplication.home.fragment.home.Fragment1
-import jp.solucoes.checklistapplication.home.fragment.Fragment2
+import jp.solucoes.checklistapplication.home.fragment.info.Fragment2
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {

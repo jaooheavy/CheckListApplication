@@ -24,7 +24,6 @@ class Fragment1: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         with(rvList){
             layoutManager = LinearLayoutManager(this@Fragment1.context)
             adapter = Fragment1ListAdapter(listHome, viewModel)
