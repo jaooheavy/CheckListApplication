@@ -1,24 +1,21 @@
 package jp.solucoes.checklistapplication.home
 
-import android.R.id.button1
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import jp.solucoes.checklistapplication.R
-import jp.solucoes.checklistapplication.model.ListHome
+import jp.solucoes.checklistapplication.model.Item
 import jp.solucoes.checklistapplication.model.StatusList
 import jp.solucoes.checklistapplication.utils.Metrics
 import kotlinx.android.synthetic.main.list_home.view.*
 
 
 class HomeListAdapter(
-    private val listHome: ArrayList<ListHome>,
+    private val item: ArrayList<Item>,
     private val viewModel: HomeViewModel,
     private val context: Context
 ): RecyclerView.Adapter<HomeListAdapter.VH>() {
@@ -40,14 +37,14 @@ class HomeListAdapter(
         }
 
         //holder.itemView.tvName.text = listHome[position].name
-        when(listHome[position].status){
+        when(item[position].status){
             StatusList.TODO -> holder.itemView.view.setBackgroundColor(Color.BLACK)
             StatusList.DOING -> holder.itemView.view.setBackgroundColor(Color.BLUE)
             StatusList.DONE -> holder.itemView.view.setBackgroundColor(Color.RED)
         }
 
         holder.itemView.setOnClickListener {
-            when(listHome[position].status){
+            when(item[position].status){
                 StatusList.TODO -> viewModel.editItem(position, StatusList.DOING)
                 StatusList.DOING -> viewModel.editItem(position, StatusList.DONE)
                 StatusList.DONE -> viewModel.editItem(position, StatusList.TODO)
@@ -67,7 +64,7 @@ class HomeListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listHome.size
+        return item.size
     }
 
     class VH(itemView: View): RecyclerView.ViewHolder(itemView)

@@ -1,8 +1,8 @@
 package jp.solucoes.checklistapplication.repository
 
-import jp.solucoes.checklistapplication.model.ListHome
+import jp.solucoes.checklistapplication.model.Item
 
 interface ListInterface {
-    suspend fun getDatabaseListHome(): ArrayList<ListHome>
-    suspend fun saveDatabaseListHome(list: ArrayList<ListHome>)
+    suspend fun getDatabaseListHome(): ArrayList<Item>
+    suspend fun saveDatabaseListHome(list: ArrayList<Item>)
 }

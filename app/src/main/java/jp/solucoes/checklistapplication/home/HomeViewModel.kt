@@ -2,8 +2,8 @@ package jp.solucoes.checklistapplication.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.solucoes.checklistapplication.model.CounterHome
-import jp.solucoes.checklistapplication.model.ListHome
+import jp.solucoes.checklistapplication.model.Counter
+import jp.solucoes.checklistapplication.model.Item
 import jp.solucoes.checklistapplication.model.StatusList
 import jp.solucoes.checklistapplication.repository.ListInterface
 import kotlinx.coroutines.CoroutineScope
@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel(private val database: ListInterface) : ViewModel(){
-    private val listAllHome = ArrayList<ListHome>()
-    val listHome: MutableLiveData<ArrayList<ListHome>> = MutableLiveData()
-    val counterHome: MutableLiveData<CounterHome> = MutableLiveData()
+    private val listAllHome = ArrayList<Item>()
+    val listItem: MutableLiveData<ArrayList<Item>> = MutableLiveData()
+    val counter: MutableLiveData<Counter> = MutableLiveData()
     var currentList: StatusList = StatusList.ALL
 
-    private suspend fun counterList(list: ArrayList<ListHome>): CounterHome{
+    private suspend fun counterList(list: ArrayList<Item>): Counter{
         var todo = 0
         var doing = 0
         var done = 0
@@ -32,12 +32,12 @@ class HomeViewModel(private val database: ListInterface) : ViewModel(){
         }
         all = todo + doing + done
 
-        return CounterHome(todo, doing, done, all)
+        return Counter(todo, doing, done, all)
     }
 
     fun addItem(){
         CoroutineScope(Dispatchers.Default).launch {
-            listAllHome.add(ListHome(0, StatusList.TODO, "ADD", ArrayList()))
+            listAllHome.add(Item(0, StatusList.TODO, "ADD", ArrayList()))
             database.saveDatabaseListHome(listAllHome)
             getItem(currentList)
         }
@@ -64,7 +64,7 @@ class HomeViewModel(private val database: ListInterface) : ViewModel(){
             listAllHome.addAll(withContext(Dispatchers.Default) { database.getDatabaseListHome() })
 
             val currentList = withContext(Dispatchers.Default) {
-                val dataReturn = ArrayList<ListHome>()
+                val dataReturn = ArrayList<Item>()
 
                 if (typeList == StatusList.ALL){
                     dataReturn.addAll(listAllHome)
@@ -78,8 +78,8 @@ class HomeViewModel(private val database: ListInterface) : ViewModel(){
             }
 
             val counter = withContext(Dispatchers.Default){ counterList(listAllHome) }
-            counterHome.value = counter
-            listHome.value = currentList
+            this@HomeViewModel.counter.value = counter
+            listItem.value = currentList
         }
     }
 }

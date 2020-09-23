@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import jp.solucoes.checklistapplication.R
-import jp.solucoes.checklistapplication.model.ListHome
+import jp.solucoes.checklistapplication.model.Item
 import jp.solucoes.checklistapplication.model.StatusList
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -14,7 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModel()
-    private val listHome: ArrayList<ListHome> = ArrayList()
+    private val item: ArrayList<Item> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,16 +23,16 @@ class HomeActivity : AppCompatActivity() {
 
         with(rvList){
             layoutManager = LinearLayoutManager(this@HomeActivity)
-            adapter = HomeListAdapter(listHome, viewModel, this@HomeActivity)
+            adapter = HomeListAdapter(item, viewModel, this@HomeActivity)
         }
 
-        viewModel.listHome.observe(this, {
-            listHome.clear()
-            listHome.addAll(it)
+        viewModel.listItem.observe(this, {
+            item.clear()
+            item.addAll(it)
             rvList?.adapter?.notifyDataSetChanged()
         })
 
-        viewModel.counterHome.observe(this, {
+        viewModel.counter.observe(this, {
             tabLayout.getTabAt(0)?.text = "ALL (${it.all})"
             tabLayout.getTabAt(1)?.text = "TO DO (${it.todo})"
             tabLayout.getTabAt(2)?.text = "DOING (${it.doing})"

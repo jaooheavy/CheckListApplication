@@ -1,6 +1,6 @@
 package jp.solucoes.checklistapplication.model
 
-data class ListHome(
+data class Item(
     val id: Int,
     var status: StatusList,
     var name: String,
