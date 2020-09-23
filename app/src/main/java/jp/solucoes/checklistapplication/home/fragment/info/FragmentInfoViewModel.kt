@@ -7,5 +7,5 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Fragment2ViewModel() : ViewModel(){
+class FragmentInfoViewModel() : ViewModel(){
 }

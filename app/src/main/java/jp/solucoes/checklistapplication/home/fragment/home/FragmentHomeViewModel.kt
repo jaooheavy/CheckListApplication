@@ -5,18 +5,19 @@ import androidx.lifecycle.ViewModel
 import jp.solucoes.checklistapplication.model.CounterHome
 import jp.solucoes.checklistapplication.model.ListHome
 import jp.solucoes.checklistapplication.model.StatusList
+import jp.solucoes.checklistapplication.repository.ListInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Fragment1ViewModel() : ViewModel(){
+class FragmentHomeViewModel(private val database: ListInterface) : ViewModel(){
     val listHome: MutableLiveData<ArrayList<ListHome>> = MutableLiveData()
     val counterHome: MutableLiveData<CounterHome> = MutableLiveData()
 
     fun getAllList(){
         CoroutineScope(Dispatchers.Main).launch {
-            val list = withContext(Dispatchers.Default) { Fragment1Database.getDatabaseListHome() }
+            val list = withContext(Dispatchers.Default) { database.getDatabaseListHome() }
             val counter = withContext(Dispatchers.Default){ counterList(list) }
             counterHome.value = counter
             listHome.value = list
@@ -42,7 +43,7 @@ class Fragment1ViewModel() : ViewModel(){
         CoroutineScope(Dispatchers.Default).launch {
             val list = listHome.value!!
             list.add(ListHome(0, StatusList.TODO, "ADD", ArrayList()))
-            Fragment1Database.saveDatabaseListHome(list)
+            database.saveDatabaseListHome(list)
 
             val counter = counterList(list)
 
@@ -57,7 +58,7 @@ class Fragment1ViewModel() : ViewModel(){
         CoroutineScope(Dispatchers.Default).launch {
             val list = listHome.value!!
             list.removeAt(position)
-            Fragment1Database.saveDatabaseListHome(list)
+            database.saveDatabaseListHome(list)
 
             val counter = counterList(list)
 
@@ -72,7 +73,7 @@ class Fragment1ViewModel() : ViewModel(){
         CoroutineScope(Dispatchers.Default).launch {
             val list = listHome.value!!
             list[position].status = value
-            Fragment1Database.saveDatabaseListHome(list)
+            database.saveDatabaseListHome(list)
 
             val counter = counterList(list)
 

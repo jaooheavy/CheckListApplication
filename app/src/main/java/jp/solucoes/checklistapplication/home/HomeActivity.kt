@@ -5,13 +5,13 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import jp.solucoes.checklistapplication.R
-import jp.solucoes.checklistapplication.home.fragment.home.Fragment1
-import jp.solucoes.checklistapplication.home.fragment.info.Fragment2
+import jp.solucoes.checklistapplication.home.fragment.home.FragmentHome
+import jp.solucoes.checklistapplication.home.fragment.info.FragmentInfo
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
-    private val fragment1: Fragment1 by lazy { Fragment1() }
-    private val fragment2: Fragment2 by lazy { Fragment2() }
+    private val fragmentHome: FragmentHome by lazy { FragmentHome() }
+    private val fragmentInfo: FragmentInfo by lazy { FragmentInfo() }
     private val fragmentManager: FragmentManager by lazy {
         supportFragmentManager
     }
@@ -20,21 +20,21 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        activeFragment = fragment1
+        activeFragment = fragmentHome
 
-        fragmentManager.beginTransaction().add(R.id.mainContent, fragment2, "2").hide(fragment2).commit()
-        fragmentManager.beginTransaction().add(R.id.mainContent, fragment1, "1").commit()
+        fragmentManager.beginTransaction().add(R.id.mainContent, fragmentInfo, "2").hide(fragmentInfo).commit()
+        fragmentManager.beginTransaction().add(R.id.mainContent, fragmentHome, "1").commit()
 
         bottom.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.home ->{
-                    fragmentManager.beginTransaction().hide(activeFragment).show(fragment1).commit()
-                    activeFragment = fragment1
+                    fragmentManager.beginTransaction().hide(activeFragment).show(fragmentHome).commit()
+                    activeFragment = fragmentHome
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.info ->{
-                    fragmentManager.beginTransaction().hide(activeFragment).show(fragment2).commit()
-                    activeFragment = fragment2
+                    fragmentManager.beginTransaction().hide(activeFragment).show(fragmentInfo).commit()
+                    activeFragment = fragmentInfo
                     return@setOnNavigationItemSelectedListener true
                 }
                 else ->{

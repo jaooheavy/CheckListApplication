@@ -8,10 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import jp.solucoes.checklistapplication.R
 import jp.solucoes.checklistapplication.home.HomeActivity
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashActivity : AppCompatActivity() {
 
-    private val viewModel: SplashViewModel by inject()
+    private val viewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

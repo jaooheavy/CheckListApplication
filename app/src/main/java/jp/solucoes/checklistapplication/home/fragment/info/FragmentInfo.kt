@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import jp.solucoes.checklistapplication.R
-import jp.solucoes.checklistapplication.home.fragment.home.Fragment1ViewModel
 import kotlinx.android.synthetic.main.activity_splash.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class Fragment2: Fragment() {
+class FragmentInfo: Fragment() {
 
-    private val viewModel: Fragment2ViewModel by inject()
+    private val viewModel: FragmentInfoViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

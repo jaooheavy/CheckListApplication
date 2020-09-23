@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import jp.solucoes.checklistapplication.R
 import jp.solucoes.checklistapplication.model.ListHome
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class Fragment1: Fragment() {
-    private val viewModel: Fragment1ViewModel by inject()
+class FragmentHome: Fragment() {
+    private val viewModel: FragmentHomeViewModel by viewModel()
     private val listHome: ArrayList<ListHome> = ArrayList()
 
     override fun onCreateView(
@@ -26,8 +26,8 @@ class Fragment1: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(rvList){
-            layoutManager = LinearLayoutManager(this@Fragment1.context)
-            adapter = this@Fragment1.context?.let { Fragment1ListAdapter(listHome, viewModel, it) }
+            layoutManager = LinearLayoutManager(this@FragmentHome.context)
+            adapter = this@FragmentHome.context?.let { FragmentHomeListAdapter(listHome, viewModel, it) }
         }
 
         viewModel.listHome.observe(viewLifecycleOwner, {
