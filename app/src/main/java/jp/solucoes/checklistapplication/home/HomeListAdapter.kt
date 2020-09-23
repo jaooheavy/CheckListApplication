@@ -1,10 +1,14 @@
-package jp.solucoes.checklistapplication.home.fragment.home
+package jp.solucoes.checklistapplication.home
 
+import android.R.id.button1
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import jp.solucoes.checklistapplication.R
 import jp.solucoes.checklistapplication.model.ListHome
@@ -12,10 +16,15 @@ import jp.solucoes.checklistapplication.model.StatusList
 import jp.solucoes.checklistapplication.utils.Metrics
 import kotlinx.android.synthetic.main.list_home.view.*
 
-class FragmentHomeListAdapter(private val listHome: ArrayList<ListHome>, private val viewModel: FragmentHomeViewModel, private val context: Context): RecyclerView.Adapter<FragmentHomeListAdapter.VH>() {
+
+class HomeListAdapter(
+    private val listHome: ArrayList<ListHome>,
+    private val viewModel: HomeViewModel,
+    private val context: Context
+): RecyclerView.Adapter<HomeListAdapter.VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return VH(LayoutInflater.from(parent.context).inflate(R.layout.list_home, parent,false))
+        return VH(LayoutInflater.from(parent.context).inflate(R.layout.list_home, parent, false))
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -26,28 +35,34 @@ class FragmentHomeListAdapter(private val listHome: ArrayList<ListHome>, private
         }else{
             val llm = holder.itemView.container.layoutParams as RecyclerView.LayoutParams
             val m = Metrics.dipToPixels(context, 8f).toInt()
-            llm.setMargins(m,m,m,m)
+            llm.setMargins(m, m, m, m)
             holder.itemView.container.layoutParams = llm
         }
 
         //holder.itemView.tvName.text = listHome[position].name
         when(listHome[position].status){
-            StatusList.TODO->holder.itemView.tvName.setTextColor(Color.BLACK)
-            StatusList.DOING->holder.itemView.tvName.setTextColor(Color.BLUE)
-            StatusList.COMPLETED->holder.itemView.tvName.setTextColor(Color.RED)
+            StatusList.TODO -> holder.itemView.view.setBackgroundColor(Color.BLACK)
+            StatusList.DOING -> holder.itemView.view.setBackgroundColor(Color.BLUE)
+            StatusList.DONE -> holder.itemView.view.setBackgroundColor(Color.RED)
         }
-
 
         holder.itemView.setOnClickListener {
             when(listHome[position].status){
-                StatusList.TODO->viewModel.editItem(position, StatusList.DOING)
-                StatusList.DOING->viewModel.editItem(position, StatusList.COMPLETED)
-                StatusList.COMPLETED->viewModel.editItem(position, StatusList.TODO)
+                StatusList.TODO -> viewModel.editItem(position, StatusList.DOING)
+                StatusList.DOING -> viewModel.editItem(position, StatusList.DONE)
+                StatusList.DONE -> viewModel.editItem(position, StatusList.TODO)
             }
         }
-        holder.itemView.setOnLongClickListener {
-            viewModel.deleteItem(position)
-            return@setOnLongClickListener true
+        holder.itemView.ivSettings.setOnClickListener {
+            val popup = PopupMenu(context, it)
+            popup.menuInflater
+                .inflate(R.menu.popup_menu, popup.menu)
+            popup.setOnMenuItemClickListener { menuItem ->
+                if (menuItem.itemId == R.id.delete)
+                    viewModel.deleteItem(position)
+                true
+            }
+            popup.show()
         }
     }
 

@@ -1,5 +1,5 @@
 package jp.solucoes.checklistapplication.model
 
 enum class StatusList {
-    TODO, DOING, COMPLETED
+    TODO, DOING, DONE, ALL
 }

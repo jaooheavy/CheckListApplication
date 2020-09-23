@@ -2,46 +2,58 @@ package jp.solucoes.checklistapplication.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import jp.solucoes.checklistapplication.R
-import jp.solucoes.checklistapplication.home.fragment.home.FragmentHome
-import jp.solucoes.checklistapplication.home.fragment.info.FragmentInfo
+import jp.solucoes.checklistapplication.model.ListHome
+import jp.solucoes.checklistapplication.model.StatusList
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity() {
-    private val fragmentHome: FragmentHome by lazy { FragmentHome() }
-    private val fragmentInfo: FragmentInfo by lazy { FragmentInfo() }
-    private val fragmentManager: FragmentManager by lazy {
-        supportFragmentManager
-    }
-    private lateinit var activeFragment: Fragment
+
+    private val viewModel: HomeViewModel by viewModel()
+    private val listHome: ArrayList<ListHome> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        activeFragment = fragmentHome
+        setSupportActionBar(toolbar)
 
-        fragmentManager.beginTransaction().add(R.id.mainContent, fragmentInfo, "2").hide(fragmentInfo).commit()
-        fragmentManager.beginTransaction().add(R.id.mainContent, fragmentHome, "1").commit()
-
-        bottom.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.home ->{
-                    fragmentManager.beginTransaction().hide(activeFragment).show(fragmentHome).commit()
-                    activeFragment = fragmentHome
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.info ->{
-                    fragmentManager.beginTransaction().hide(activeFragment).show(fragmentInfo).commit()
-                    activeFragment = fragmentInfo
-                    return@setOnNavigationItemSelectedListener true
-                }
-                else ->{
-                    return@setOnNavigationItemSelectedListener false
-                }
-            }
+        with(rvList){
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            adapter = HomeListAdapter(listHome, viewModel, this@HomeActivity)
         }
 
+        viewModel.listHome.observe(this, {
+            listHome.clear()
+            listHome.addAll(it)
+            rvList?.adapter?.notifyDataSetChanged()
+        })
+
+        viewModel.counterHome.observe(this, {
+            tabLayout.getTabAt(0)?.text = "ALL (${it.all})"
+            tabLayout.getTabAt(1)?.text = "TO DO (${it.todo})"
+            tabLayout.getTabAt(2)?.text = "DOING (${it.doing})"
+            tabLayout.getTabAt(3)?.text = "DONE (${it.done})"
+        })
+
+        fabAdd.setOnClickListener { viewModel.addItem() }
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab?.position){
+                    0 -> viewModel.getItem(StatusList.ALL)
+                    1 -> viewModel.getItem(StatusList.TODO)
+                    2 -> viewModel.getItem(StatusList.DOING)
+                    3 -> viewModel.getItem(StatusList.DONE)
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
+        viewModel.getItem(StatusList.ALL)
     }
 }
